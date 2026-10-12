@@ -1,0 +1,51 @@
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MaterialApp(home: DebugApp()));
+}
+
+class DebugApp extends StatefulWidget {
+  const DebugApp({super.key});
+
+  @override
+  State<DebugApp> createState() => _DebugAppState();
+}
+
+class _DebugAppState extends State<DebugApp> {
+  int counter = 0;
+
+  void incrementCounter() {
+    debugPrint('Before increment: $counter');
+
+    setState(() {
+      counter++;
+    });
+
+    debugPrint('After increment: $counter');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter Debugging'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Counter: $counter',
+              style: const TextStyle(fontSize: 24),
+            ),
+            ElevatedButton(
+              onPressed: incrementCounter,
+              child: const Text('Increment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
