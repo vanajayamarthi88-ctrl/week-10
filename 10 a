@@ -1,0 +1,78 @@
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int counter = 0;
+  final controller = TextEditingController();
+  String message = '';
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          children: [
+            Text('Counter: $counter'),
+            ElevatedButton(
+              onPressed: () => setState(() => counter++),
+              child: const Text('Increment'),
+            ),
+            TextField(
+              key: const Key('nameField'),
+              controller: controller,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  message = controller.text.trim().isEmpty
+                      ? 'Name is required'
+                      : 'Valid input';
+                });
+              },
+              child: const Text('Submit'),
+            ),
+            Text(message),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  testWidgets('Button increments counter',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    expect(find.text('Counter: 0'), findsOneWidget);
+
+    await tester.tap(find.text('Increment'));
+    await tester.pump();
+
+    expect(find.text('Counter: 1'), findsOneWidget);
+  });
+
+  testWidgets('Empty input shows validation error',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.text('Submit'));
+    await tester.pump();
+
+    expect(find.text('Name is required'), findsOneWidget);
+  });
+}
